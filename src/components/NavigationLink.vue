@@ -3,7 +3,7 @@
     class="navigation-link"
     :to="link"
     :exact="exact"
-    active-class="active"
+    :active-class="!author ? 'navigation-link--active' : ''"
   >
     <img v-if="author" src="../assets/images/author-logo.png" alt="pic" />
     <div v-else class="block" />
@@ -71,5 +71,10 @@ img {
   border-radius: 50%;
   margin-right: 15px;
   margin-left: 10px;
+}
+
+.navigation-link--active {
+  background: #7e93ff;
+  color: #ffffff;
 }
 </style>
