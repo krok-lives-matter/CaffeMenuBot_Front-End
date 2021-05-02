@@ -5,6 +5,9 @@
 </template>
 
 <style lang="scss">
+* {
+  outline: none;
+}
 body {
   background: #fff;
   font-size: 18px;
