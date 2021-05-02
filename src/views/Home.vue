@@ -1,8 +1,10 @@
 <template>
   <div class="container">
-    <navigation-link :author="true" text="Serious Sam" />
-    <navigation-link text="Bot status" />
-    <navigation-link text="Edit menu" />
+    <div class="navigation">
+      <navigation-link :author="true" text="Serious Sam" />
+      <navigation-link link="/status" text="Bot status" />
+      <navigation-link link="/edit" text="Edit menu" />
+    </div>
   </div>
 </template>
 
@@ -16,3 +18,8 @@ export default {
   },
 };
 </script>
+<style>
+.navigation {
+  margin-top: 40px;
+}
+</style>
