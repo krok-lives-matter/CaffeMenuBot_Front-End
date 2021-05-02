@@ -15,4 +15,8 @@ body {
   font-family: "Segoe UI", sans-serif;
   color: #111111;
 }
+.container {
+  max-width: 100%;
+  padding: 0 40px;
+}
 </style>
