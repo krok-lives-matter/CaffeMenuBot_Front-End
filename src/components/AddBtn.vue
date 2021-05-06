@@ -1,5 +1,5 @@
 <template>
-  <div class="add-btn">
+  <div class="add-btn" @click="openModal">
     <svg
       width="40"
       height="40"
@@ -15,6 +15,16 @@
 <script>
 export default {
   name: "AddBtn",
+  props: {
+    modal: {
+      type: Boolean,
+    },
+  },
+  methods: {
+    openModal() {
+      this.$emit("openModal");
+    },
+  },
 };
 </script>
 
@@ -29,6 +39,7 @@ export default {
   align-items: center;
   cursor: pointer;
   transition: 0.3s all ease-out;
+
   &:hover {
     background: #e6e6ec;
   }
