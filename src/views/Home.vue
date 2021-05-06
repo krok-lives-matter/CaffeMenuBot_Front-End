@@ -1,25 +1,18 @@
 <template>
-  <div class="container">
-    <div class="navigation">
-      <navigation-link :author="true" text="Serious Sam" />
-      <navigation-link link="/status" text="Bot status" />
-      <navigation-link link="/edit" text="Edit menu" />
-    </div>
-  </div>
+  <MainLayout>
+    <Status />
+  </MainLayout>
 </template>
 
 <script>
-import NavigationLink from "../components/NavigationLink";
+import Status from "../components/Status";
+import MainLayout from "../layouts/MainLayout";
 
 export default {
   name: "Home",
   components: {
-    NavigationLink,
+    MainLayout,
+    Status,
   },
 };
 </script>
-<style>
-.navigation {
-  margin-top: 40px;
-}
-</style>
