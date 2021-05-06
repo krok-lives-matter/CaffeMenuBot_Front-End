@@ -1,0 +1,67 @@
+* {
+  outline: none;
+}
+
+body {
+  background: #fff;
+  font-size: 18px;
+  font-weight: 400;
+  font-family: "Segoe UI", sans-serif;
+  color: #111111;
+}
+
+h1 {
+  margin: 0 0 40px 0;
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 120%;
+}
+
+.container {
+  max-width: 100%;
+  padding: 0 40px;
+}
+
+.btn {
+  width: 150px;
+  height: 52px;
+  border: none;
+  background: transparent;
+  color: #111111;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0;
+  cursor: pointer;
+  transition: .3s all ease-out;
+}
+
+.btn-danger {
+  background: #DB5461;
+  color: #ffffff;
+
+  &:hover {
+    background: #E27782;
+  }
+}
+
+.btn-warning {
+  background: #FBD240;
+
+  &:hover {
+    background: #FCDC6A;
+  }
+}
+
+.btn-success {
+  background: #16C172;
+  color: #ffffff;
+
+  &:hover {
+    background: #18D47C;
+  }
+}
