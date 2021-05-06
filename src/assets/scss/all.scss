@@ -65,3 +65,12 @@ h1 {
     background: #18D47C;
   }
 }
+
+.btn-primary {
+  background: #7E93FF;
+  color: #ffffff;
+
+  &:hover {
+    background: #9BACFF;
+  }
+}
