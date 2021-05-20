@@ -15,6 +15,10 @@
       />
       <span>{{ route.name }}</span>
     </router-link>
+    <a href="#" class="navigation-link" @click.prevent="signOut">
+      <img class="image" src="../assets/images/red-heart.png" alt="pic" />
+      <span>Exit</span>
+    </a>
   </div>
 </template>
 
@@ -24,18 +28,18 @@ export default {
   data: () => ({
     routes: [
       {
-        name: "Serious Sam",
-        link: "/user",
+        name: "Admin",
+        link: "/",
         img: "author-logo.png",
         author: true,
       },
       {
-        name: "Bot status",
-        link: "/",
+        name: "Bot",
+        link: "/status",
         img: "moon-apple.png",
       },
       {
-        name: "Edit menu",
+        name: "Menu",
         link: "/edit",
         img: "fire-apple.png",
       },
@@ -44,6 +48,10 @@ export default {
   methods: {
     getImgUrl(pic) {
       return require("../assets/images/" + pic);
+    },
+    signOut() {
+      this.$store.commit("auth/REMOVE_ADMIN");
+      this.$router.push("/admin");
     },
   },
 };
