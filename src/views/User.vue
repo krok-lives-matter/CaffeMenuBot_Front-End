@@ -1,6 +1,10 @@
 <template>
   <MainLayout>
-    <h1>User</h1>
+    <div>
+      <h1>Hello, {{ $store.state.auth.admin.user.userName }}</h1>
+      <p>Your email: {{ $store.state.auth.admin.user.email }}</p>
+      <p>Your id: {{ $store.state.auth.admin.user.id }}</p>
+    </div>
   </MainLayout>
 </template>
 
