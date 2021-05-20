@@ -2,8 +2,15 @@
   <div class="modal">
     <div class="content">
       <div><h1>Create Menu</h1></div>
-      <form @submit.prevent="addMenu">
-        <div><input v-model="name" type="text" placeholder="Menu name" /></div>
+      <form class="form" @submit.prevent="addMenu">
+        <div>
+          <input
+            class="input"
+            v-model="name"
+            type="text"
+            placeholder="Menu name"
+          />
+        </div>
         <button class="btn btn-primary" type="submit">Create Menu</button>
       </form>
     </div>
@@ -55,41 +62,5 @@ export default {
   top: 0;
   left: 0;
   background: #fff;
-}
-
-.content {
-  padding-top: 200px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-input {
-  border: 1px solid #cfcfcf;
-  height: 50px;
-  border-radius: 5px;
-  padding-left: 20px;
-  display: flex;
-  align-items: center;
-  width: 400px;
-  margin-bottom: 30px;
-  color: #111111;
-  font-size: 18px;
-  line-height: 120%;
-
-  &::placeholder {
-    color: #cfcfcf;
-  }
-}
-form {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-.exit {
-  position: absolute;
-  top: 60px;
-  right: 60px;
-  cursor: pointer;
 }
 </style>
