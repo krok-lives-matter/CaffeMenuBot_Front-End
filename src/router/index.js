@@ -5,19 +5,33 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
-    name: "Home",
+    path: "/status",
+    name: "Status",
     component: () => import("../views/Home.vue"),
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/edit",
     name: "EditMenu",
     component: () => import("../views/EditMenu.vue"),
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
-    path: "/user",
+    path: "/",
     name: "User",
     component: () => import("../views/User.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/admin",
+    name: "AdminAuth",
+    component: () => import("../views/AdminAuth.vue"),
   },
 ];
 
