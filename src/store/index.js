@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import auth from "./auth";
 
 Vue.use(Vuex);
 
@@ -32,5 +33,8 @@ export default new Vuex.Store({
     updateMenu() {
       // Logic for axios update menu item
     },
+  },
+  modules: {
+    auth,
   },
 });
