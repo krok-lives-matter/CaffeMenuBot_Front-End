@@ -23,7 +23,9 @@
         </div>
       </div>
     </div>
-    <CreateModal @addMenu="addMenu" @closeModal="closeModal" v-if="modal" />
+    <transition name="fade">
+      <CreateModal @addMenu="addMenu" @closeModal="closeModal" v-if="modal" />
+    </transition>
   </MainLayout>
 </template>
 
@@ -67,6 +69,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
 .edit-menu {
   width: 100%;
 
