@@ -3,21 +3,22 @@
     <div class="edit-menu">
       <h1>Menu</h1>
       <div class="edit-menu__wrapper">
-        <div
-          v-for="menu in $store.state.menu"
-          :key="menu.id"
-          class="edit-menu__item"
-        >
-          <img
-            v-if="!menu.image"
-            src="../assets/images/menu_preview.jpg"
-            alt="pic"
-          />
-          <img v-else :src="menu.image" alt="pic" />
-          <div class="edit-menu__item-desc">
-            {{ menu.name | truncate(15) }}
-          </div>
-        </div>
+        <template v-if="$store.state.menu.menus">
+          <template v-for="menu in $store.state.menu.menus">
+            <RouterLink
+              v-if="menu"
+              :to="`/menu/dishes/${menu.id}`"
+              :key="menu.id"
+              class="edit-menu__item"
+              :menu="menu"
+            >
+              <img src="../assets/images/menu_preview.jpg" alt="pic" />
+              <div class="edit-menu__item-desc">
+                {{ menu.categoryName | truncate(15) }}
+              </div>
+            </RouterLink>
+          </template>
+        </template>
         <div class="edit-menu__item">
           <AddBtn @openModal="openModal" />
         </div>
@@ -37,8 +38,9 @@ import CreateModal from "../components/Modal";
 export default {
   name: "EditMenu",
   components: { CreateModal, AddBtn, MainLayout },
-  mounted() {
+  async mounted() {
     document.addEventListener("keydown", this.exitModalByKeyPress);
+    await this.$store.dispatch("menu/fetchMenu");
   },
   beforeDestroy() {
     document.removeEventListener("keydown", this.exitModalByKeyPress);
@@ -53,9 +55,10 @@ export default {
     closeModal() {
       this.modal = false;
     },
-    addMenu(item) {
-      if (item.name.length) {
-        this.$store.commit("ADD_MENU", item);
+    async addMenu(item) {
+      if (item.categoryName.length) {
+        await this.$store.dispatch("menu/addMenu", item);
+        await this.$store.dispatch("menu/fetchMenu", item);
         this.modal = false;
       }
     },
@@ -85,6 +88,7 @@ export default {
   &__wrapper {
     display: flex;
     flex-wrap: wrap;
+    min-width: 870px;
   }
 
   &__item {
