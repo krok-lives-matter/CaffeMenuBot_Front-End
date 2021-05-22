@@ -14,10 +14,13 @@ Vue.filter("truncate", function (text, stop, clamp) {
 });
 
 axios.defaults.baseURL = "https://cmb-api.vova-lantsov.dev/api";
+if (store.state.auth.jwt) {
+  axios.defaults.headers["Authorization"] = "Bearer " + store.state.auth.jwt;
+}
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!store.state.auth.admin) {
+    if (!store.state.auth.jwt) {
       router.push({
         path: "/admin",
       });
