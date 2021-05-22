@@ -3,19 +3,16 @@ import axios from "axios";
 export default {
   namespaced: true,
   state: {
-    admin: JSON.parse(localStorage.getItem("admin")),
+    jwt: localStorage.getItem("jwt"),
   },
   mutations: {
     SET_ADMIN(state, admin) {
-      state.admin = { jwt: admin.token, user: admin.user };
-      localStorage.setItem(
-        "admin",
-        JSON.stringify({ jwt: admin.token, user: admin.user })
-      );
+      state.jwt = admin.token;
+      localStorage.setItem("jwt", admin.token);
     },
     REMOVE_ADMIN(state) {
-      state.admin = null;
-      localStorage.setItem("admin", null);
+      state.jwt = "";
+      localStorage.removeItem("jwt");
     },
   },
   actions: {
