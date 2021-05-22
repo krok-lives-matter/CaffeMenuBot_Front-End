@@ -13,8 +13,8 @@ const routes = [
     },
   },
   {
-    path: "/edit",
-    name: "EditMenu",
+    path: "/menu",
+    name: "Menu",
     component: () => import("../views/EditMenu.vue"),
     meta: {
       requiresAuth: true,
@@ -32,6 +32,14 @@ const routes = [
     path: "/admin",
     name: "AdminAuth",
     component: () => import("../views/AdminAuth.vue"),
+  },
+  {
+    path: "/menu/dishes/:id",
+    name: "Dishes",
+    component: () => import("../views/Dishes.vue"),
+    meta: {
+      requiresAuth: true,
+    },
   },
 ];
 
