@@ -11,6 +11,10 @@ body {
   color: #111111;
 }
 
+a {
+  text-decoration: none;
+}
+
 h1 {
   margin: 0 0 40px 0;
   font-weight: 600;
@@ -84,6 +88,24 @@ h1 {
   justify-content: center;
 }
 
+.textarea {
+  border: 1px solid #cfcfcf;
+  height: 140px;
+  border-radius: 5px;
+  padding-left: 20px;
+  padding-top: 14px;
+  display: flex;
+  align-items: center;
+  color: #111111;
+  font-size: 18px;
+  line-height: 120%;
+  width: 100%;
+  resize: none;
+  &::placeholder {
+    color: #cfcfcf;
+  }
+}
+
 .input {
   border: 1px solid #cfcfcf;
   height: 50px;
@@ -101,6 +123,16 @@ h1 {
     color: #cfcfcf;
   }
 }
+
+.input-disabled {
+  background: #CFCFCF;
+  color: #111111;
+  &::placeholder {
+    color: #111111;
+
+  }
+}
+
 .form {
   display: flex;
   align-items: center;
