@@ -45,8 +45,7 @@ export default {
     },
     addMenu() {
       const menu = {
-        id: Date.now(),
-        name: this.name,
+        categoryName: this.name,
       };
       this.$emit("addMenu", menu);
     },
