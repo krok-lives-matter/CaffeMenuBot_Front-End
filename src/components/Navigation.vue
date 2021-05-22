@@ -40,7 +40,7 @@ export default {
       },
       {
         name: "Menu",
-        link: "/edit",
+        link: "/menu",
         img: "fire-apple.png",
       },
     ],
