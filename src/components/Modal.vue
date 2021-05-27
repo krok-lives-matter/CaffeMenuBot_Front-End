@@ -46,6 +46,7 @@ export default {
     addMenu() {
       const menu = {
         categoryName: this.name,
+        isVisible: false,
       };
       this.$emit("addMenu", menu);
     },
