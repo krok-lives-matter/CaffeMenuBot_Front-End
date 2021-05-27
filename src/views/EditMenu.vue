@@ -10,9 +10,13 @@
               :to="`/menu/dishes/${menu.id}`"
               :key="menu.id"
               class="edit-menu__item"
-              :menu="menu"
             >
-              <img src="../assets/images/menu_preview.jpg" alt="pic" />
+              <img
+                v-if="menu.coverPhotoUrl"
+                :src="menu.coverPhotoUrl"
+                alt="pic"
+              />
+              <img v-else src="../assets/images/menu_preview.jpg" alt="pic" />
               <div class="edit-menu__item-desc">
                 {{ menu.categoryName | truncate(15) }}
               </div>

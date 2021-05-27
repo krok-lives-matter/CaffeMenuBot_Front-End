@@ -12,17 +12,34 @@
         <div class="dishes__item">
           <label for="file">
             <div class="dishes__image">
-              <img src="@/assets/images/big-menu-preview.png" alt="pic" />
+              <img
+                v-if="!$store.state.menu.menu.coverPhotoUrl"
+                src="@/assets/images/big-menu-preview.png"
+                alt="pic"
+              />
+              <img
+                v-else
+                :src="$store.state.menu.menu.coverPhotoUrl"
+                alt="pic"
+              />
             </div>
           </label>
-          <input type="file" id="file" />
-          <div class="dishes__title" id="dishes-title">
+          <input
+            type="file"
+            id="file"
+            accept="image/*"
+            @change="fileImage = $event.target.files[0]"
+          />
+          <div class="dishes__title" id="dishes-title" contenteditable="true">
             {{ $store.state.menu.menu.categoryName }}
           </div>
           <div class="dishes__controls">
             <div
               @click="toggleCheck"
-              :class="{ 'dishes-control-switch--active': checkState }"
+              :class="{
+                'dishes-control-switch--active':
+                  $store.state.menu.menu.isVisible,
+              }"
               class="dishes-control dishes-control-switch"
             >
               <span></span>
@@ -34,6 +51,13 @@
               <img src="@/assets/images/edit.svg" alt="pic" />
             </div>
           </div>
+          <!--          <button-->
+          <!--            v-if="image"-->
+          <!--            @click="handleUploadImage"-->
+          <!--            class="btn btn-success dishes__upload"-->
+          <!--          >-->
+          <!--            Upload-->
+          <!--          </button>-->
         </div>
         <div class="dishes__item">
           <div class="dishes__search">
@@ -53,8 +77,8 @@
               {{ tabs === "table" ? "Add mode" : "Search mode" }}
             </button>
           </div>
-          <template v-if="dishes.length">
-            <div v-if="tabs === 'table'" class="dishes__table">
+          <div v-if="tabs === 'table'" class="dishes__table">
+            <template v-if="$store.state.dishes.dishes.length">
               <DishTableItem
                 v-for="dish in searchDish"
                 :key="dish.id"
@@ -62,8 +86,17 @@
                 @deleteDish="deleteDish"
                 @editDish="editDish"
               />
-            </div>
-          </template>
+            </template>
+            <template v-else>
+              <div class="dishes__table-item">
+                <div class="dishes__table-head">
+                  <div class="dishes__table-big-title">
+                    Nothing here, switch to add mode and start adding dishes...
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
           <form
             @submit.prevent="addDish"
             v-if="tabs === 'form'"
@@ -71,14 +104,14 @@
           >
             <input
               class="input"
-              v-model="dish.title"
+              v-model="dish.dishName"
               type="text"
               placeholder="Title..."
             />
             <input
               class="input"
               v-model="dish.price"
-              type="text"
+              type="number"
               placeholder="Price..."
             />
             <input
@@ -103,7 +136,7 @@
             class="dishes__form"
           >
             <input
-              v-model="currentDish.title"
+              v-model="currentDish.dishName"
               class="input"
               type="text"
               placeholder="Name..."
@@ -111,7 +144,7 @@
             <input
               v-model="currentDish.price"
               class="input"
-              type="text"
+              type="number"
               placeholder="Price..."
             />
             <input
@@ -139,60 +172,51 @@
 <script>
 import MainLayout from "../layouts/MainLayout";
 import DishTableItem from "../components/DishTableItem";
+import axios from "axios";
 
 export default {
   name: "Dishes",
   components: { MainLayout, DishTableItem },
   async mounted() {
-    await this.$store.dispatch(
-      "menu/fetchOneMenu",
-      this.$router.currentRoute.params.id
-    );
+    await this.$store.dispatch("menu/fetchOneMenu", this.dish.categoryId);
+    await this.$store.dispatch("dishes/fetchDishes", this.dish.categoryId);
   },
   data() {
     return {
-      checkState: false,
+      fileImage: null,
       search: "",
       tabs: "table",
-      dishes: [
-        {
-          id: 1,
-          title: "Шашлык",
-          description:
-            "1080 грамм. Тигровые креветки, тунец,  лосось, осьминог, окунь, помидоры черри, лайм, лимон, соус.",
-          serving: "150/50/25г",
-          price: "159 грн",
-        },
-        {
-          id: 2,
-          title: "Шашлык-машлык",
-          description:
-            "1080 грамм. Тигровые креветки, тунец,  лосось, осьминог, окунь, помидоры черри, лайм, лимон, соус.",
-          serving: "150/50/25г",
-          price: "159 грн",
-        },
-      ],
       dish: {
-        title: "",
+        dishName: "",
         description: "",
         serving: "",
         price: "",
+        categoryId: Number(this.$router.currentRoute.params.id),
       },
       currentDish: "",
     };
   },
   computed: {
     searchDish() {
-      return this.dishes.filter((dish) => {
-        return dish.title.toLowerCase().includes(this.search.toLowerCase());
+      return this.$store.state.dishes.dishes.filter((dish) => {
+        return dish.dishName.toLowerCase().includes(this.search.toLowerCase());
       });
     },
   },
   methods: {
-    toggleCheck() {
-      this.checkState = !this.checkState;
+    async toggleCheck() {
+      this.$store.state.menu.menu.isVisible = !this.$store.state.menu.menu
+        .isVisible;
+      try {
+        await axios.put(
+          "/dashboard/menu/categories",
+          this.$store.state.menu.menu
+        );
+      } catch (e) {
+        console.error("[Error]: toggleCheck");
+        throw new Error(e.message);
+      }
     },
-
     switchTab() {
       if (this.tabs === "table") {
         this.tabs = "form";
@@ -201,29 +225,25 @@ export default {
       }
     },
     editDish(id) {
-      this.currentDish = this.dishes.find((i) => i.id === id);
+      this.currentDish = this.$store.state.dishes.dishes.find(
+        (item) => item.id === id
+      );
       this.tabs = "update";
     },
-    deleteDish(id) {
-      this.dishes = this.dishes.filter((item) => item.id !== id);
-    },
-    addDish() {
-      const dish = {
-        ...this.dish,
-      };
-      this.dishes.unshift(dish);
+    async addDish() {
+      await this.$store.dispatch("dishes/addDish", this.dish);
       this.tabs = "table";
-      this.dish = {
-        id: Date.now(),
-        title: "",
-        description: "",
-        price: "",
-        serving: "",
-      };
+      this.dish.dishName = "";
+      this.dish.description = "";
+      this.dish.price = "";
+      this.dish.serving = "";
     },
-    updateDish() {
-      const idx = this.dishes.findIndex((i) => i === this.currentDish);
-      this.dishes[idx] = this.currentDish;
+    async deleteDish(id) {
+      await this.$store.dispatch("dishes/deleteDish", id);
+    },
+    async updateDish() {
+      await this.$store.dispatch("dishes/updateDish", this.currentDish);
+      await this.$store.dispatch("dishes/fetchDishes", this.dish.categoryId);
       this.tabs = "table";
     },
     async deleteMenu() {
@@ -232,6 +252,14 @@ export default {
         this.$router.currentRoute.params.id
       );
       await this.$router.push("/menu");
+    },
+  },
+  watch: {
+    fileImage() {
+      const formData = new FormData();
+      formData.append("file", this.fileImage, this.fileImage.name);
+      formData.append("categoryId", this.dish.categoryId);
+      this.$store.dispatch("menu/setCoverPhoto", formData);
     },
   },
 };
@@ -248,6 +276,19 @@ export default {
   .input {
     width: 100%;
     margin-bottom: 5px;
+  }
+
+  &__upload {
+    margin-top: 12px;
+    width: 100%;
+  }
+
+  &__image {
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   &__form-button {
@@ -293,10 +334,12 @@ export default {
   &__image {
     width: 250px;
     height: 250px;
+    border-radius: 5px;
 
     img {
       width: 100%;
       height: 100%;
+      border-radius: 7px;
     }
 
     position: relative;

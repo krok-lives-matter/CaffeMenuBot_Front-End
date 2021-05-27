@@ -2,7 +2,7 @@
   <div class="dishes__table-item">
     <div class="dishes__table-head">
       <div class="dishes__table-big-title">
-        {{ dish.title }}
+        {{ dish.dishName }}
       </div>
       <div class="dishes__table-controls">
         <div

@@ -41,6 +41,14 @@ const routes = [
       requiresAuth: true,
     },
   },
+  {
+    path: "*",
+    name: "404",
+    component: () => import("../views/Page_404.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
 ];
 
 const router = new VueRouter({

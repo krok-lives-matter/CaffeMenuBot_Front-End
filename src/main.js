@@ -18,6 +18,18 @@ if (store.state.auth.jwt) {
   axios.defaults.headers["Authorization"] = "Bearer " + store.state.auth.jwt;
 }
 
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response.status === 401) {
+      router.push("/admin");
+      store.commit("auth/REMOVE_JWT");
+      return;
+    }
+    return Promise.reject(error);
+  }
+);
+
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!store.state.auth.jwt) {

@@ -11,7 +11,7 @@ export default {
       state.menus.push(dish);
     },
     SET_MENU(state, menu) {
-      state.menus = menu.$values;
+      state.menus = menu;
     },
     DELETE_MENU(state, id) {
       state.menus = state.menus.filter((i) => i.id !== id);
@@ -23,9 +23,12 @@ export default {
   actions: {
     async addMenu({ commit }, item) {
       try {
-        const { status } = await axios.post("/dashboard/menu/categories", item);
+        const { data, status } = await axios.post(
+          "/dashboard/menu/categories",
+          item
+        );
         if (status === 200) {
-          commit("ADD_MENU", item);
+          commit("ADD_MENU", data);
         }
       } catch (e) {
         console.error("[Error]: Add Menu");
@@ -66,6 +69,25 @@ export default {
         }
       } catch (e) {
         console.error("[Error]: Fetch One Menu");
+        throw new Error(e.message);
+      }
+    },
+    async setCoverPhoto({ dispatch }, formData) {
+      try {
+        const { status } = await axios.post(
+          "/dashboard/menu/categories/setCoverPhoto",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        if (status === 200) {
+          dispatch("fetchMenu");
+        }
+      } catch (e) {
+        console.error("[Error]: setCoverPhoto");
         throw new Error(e.message);
       }
     },
