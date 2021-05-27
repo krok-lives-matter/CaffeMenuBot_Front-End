@@ -1,5 +1,20 @@
 <template>
   <MainLayout>
+    <transition name="fade">
+      <Modal title="Update title" @closeModal="closeModal" v-if="modal">
+        <form class="form" @submit.prevent="updateTitle">
+          <div>
+            <input
+              class="input"
+              v-model="title"
+              type="text"
+              placeholder="Category title"
+            />
+          </div>
+          <button class="btn btn-primary" type="submit">Update Title</button>
+        </form>
+      </Modal>
+    </transition>
     <div class="dishes">
       <RouterLink to="/menu" class="dishes__back">
         <div class="dishes__back-icon">
@@ -30,7 +45,7 @@
             accept="image/*"
             @change="fileImage = $event.target.files[0]"
           />
-          <div class="dishes__title" id="dishes-title" contenteditable="true">
+          <div class="dishes__title" id="dishes-title">
             {{ $store.state.menu.menu.categoryName }}
           </div>
           <div class="dishes__controls">
@@ -47,17 +62,10 @@
             <div class="dishes-control dishes-control-icon" @click="deleteMenu">
               <img src="@/assets/images/remove.svg" alt="pic" />
             </div>
-            <div class="dishes-control dishes-control-icon">
+            <div class="dishes-control dishes-control-icon" @click="openModal">
               <img src="@/assets/images/edit.svg" alt="pic" />
             </div>
           </div>
-          <!--          <button-->
-          <!--            v-if="image"-->
-          <!--            @click="handleUploadImage"-->
-          <!--            class="btn btn-success dishes__upload"-->
-          <!--          >-->
-          <!--            Upload-->
-          <!--          </button>-->
         </div>
         <div class="dishes__item">
           <div class="dishes__search">
@@ -173,16 +181,23 @@
 import MainLayout from "../layouts/MainLayout";
 import DishTableItem from "../components/DishTableItem";
 import axios from "axios";
+import Modal from "../components/Modal";
 
 export default {
   name: "Dishes",
-  components: { MainLayout, DishTableItem },
+  components: { Modal, MainLayout, DishTableItem },
   async mounted() {
+    document.addEventListener("keydown", this.exitModalByKeyPress);
     await this.$store.dispatch("menu/fetchOneMenu", this.dish.categoryId);
     await this.$store.dispatch("dishes/fetchDishes", this.dish.categoryId);
   },
+  beforeDestroy() {
+    document.removeEventListener("keydown", this.exitModalByKeyPress);
+  },
   data() {
     return {
+      title: "",
+      modal: false,
       fileImage: null,
       search: "",
       tabs: "table",
@@ -204,6 +219,30 @@ export default {
     },
   },
   methods: {
+    openModal() {
+      this.modal = true;
+    },
+    closeModal() {
+      this.modal = false;
+    },
+    switchTab() {
+      if (this.tabs === "table") {
+        this.tabs = "form";
+      } else {
+        this.tabs = "table";
+      }
+    },
+    exitModalByKeyPress(event) {
+      if (event.code === "Escape") {
+        this.modal = false;
+      }
+    },
+    editDish(id) {
+      this.currentDish = this.$store.state.dishes.dishes.find(
+        (item) => item.id === id
+      );
+      this.tabs = "update";
+    },
     async toggleCheck() {
       this.$store.state.menu.menu.isVisible = !this.$store.state.menu.menu
         .isVisible;
@@ -216,19 +255,6 @@ export default {
         console.error("[Error]: toggleCheck");
         throw new Error(e.message);
       }
-    },
-    switchTab() {
-      if (this.tabs === "table") {
-        this.tabs = "form";
-      } else {
-        this.tabs = "table";
-      }
-    },
-    editDish(id) {
-      this.currentDish = this.$store.state.dishes.dishes.find(
-        (item) => item.id === id
-      );
-      this.tabs = "update";
     },
     async addDish() {
       await this.$store.dispatch("dishes/addDish", this.dish);
@@ -252,6 +278,15 @@ export default {
         this.$router.currentRoute.params.id
       );
       await this.$router.push("/menu");
+    },
+    async updateTitle() {
+      const item = this.$store.state.menu.menu;
+      item.categoryName = this.title;
+      item.id = String(item.id);
+      if (this.title.length) {
+        await this.$store.dispatch("menu/updateMenu", item);
+        await this.$store.dispatch("menu/fetchOneMenu", this.dish.categoryId);
+      }
     },
   },
   watch: {
