@@ -1,18 +1,10 @@
 <template>
   <div class="modal">
     <div class="content">
-      <div><h1>Create Menu</h1></div>
-      <form class="form" @submit.prevent="addMenu">
-        <div>
-          <input
-            class="input"
-            v-model="name"
-            type="text"
-            placeholder="Menu name"
-          />
-        </div>
-        <button class="btn btn-primary" type="submit">Create Menu</button>
-      </form>
+      <div>
+        <h1>{{ title }}</h1>
+      </div>
+      <slot> </slot>
     </div>
     <div class="exit" @click="closeModal">
       <svg
@@ -32,23 +24,16 @@
 export default {
   name: "Modal",
   props: {
-    modal: {
-      type: Boolean,
+    title: {
+      type: String,
+      default: "Type text",
     },
   },
-  data: () => ({
-    name: "",
-  }),
+
+  data: () => ({}),
   methods: {
     closeModal() {
       this.$emit("closeModal");
-    },
-    addMenu() {
-      const menu = {
-        categoryName: this.name,
-        isVisible: false,
-      };
-      this.$emit("addMenu", menu);
     },
   },
 };
@@ -58,6 +43,7 @@ export default {
 .modal {
   width: 100%;
   height: 100vh;
+  z-index: 999;
   position: absolute;
   top: 0;
   left: 0;
