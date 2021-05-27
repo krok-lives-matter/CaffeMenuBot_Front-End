@@ -29,7 +29,19 @@
       </div>
     </div>
     <transition name="fade">
-      <CreateModal @addMenu="addMenu" @closeModal="closeModal" v-if="modal" />
+      <Modal title="Create Modal" @closeModal="closeModal" v-if="modal">
+        <form class="form" @submit.prevent="addMenu">
+          <div>
+            <input
+              class="input"
+              v-model="name"
+              type="text"
+              placeholder="Menu name"
+            />
+          </div>
+          <button class="btn btn-primary" type="submit">Create Menu</button>
+        </form>
+      </Modal>
     </transition>
   </MainLayout>
 </template>
@@ -37,11 +49,11 @@
 <script>
 import MainLayout from "../layouts/MainLayout";
 import AddBtn from "../components/AddBtn";
-import CreateModal from "../components/Modal";
+import Modal from "../components/Modal";
 
 export default {
   name: "EditMenu",
-  components: { CreateModal, AddBtn, MainLayout },
+  components: { Modal, AddBtn, MainLayout },
   async mounted() {
     document.addEventListener("keydown", this.exitModalByKeyPress);
     await this.$store.dispatch("menu/fetchMenu");
@@ -51,6 +63,7 @@ export default {
   },
   data: () => ({
     modal: false,
+    name: "",
   }),
   methods: {
     openModal() {
@@ -59,10 +72,14 @@ export default {
     closeModal() {
       this.modal = false;
     },
-    async addMenu(item) {
-      if (item.categoryName.length) {
+    async addMenu() {
+      if (this.name.length) {
+        const item = {
+          categoryName: this.name,
+          isVisible: false,
+        };
         await this.$store.dispatch("menu/addMenu", item);
-        await this.$store.dispatch("menu/fetchMenu", item);
+        await this.$store.dispatch("menu/fetchMenu");
         this.modal = false;
       }
     },
@@ -76,16 +93,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
-
 .edit-menu {
   width: 100%;
 
