@@ -28,10 +28,9 @@ export default {
   data: () => ({
     routes: [
       {
-        name: "Admin",
+        name: "Settings",
         link: "/",
         img: "author-logo.png",
-        author: true,
       },
       {
         name: "Bot",
@@ -43,6 +42,11 @@ export default {
         link: "/menu",
         img: "fire-apple.png",
       },
+      {
+        name: "Reviews",
+        link: "/review",
+        img: "fire-apple.png",
+      },
     ],
   }),
   methods: {
@@ -50,7 +54,7 @@ export default {
       return require("../assets/images/" + pic);
     },
     signOut() {
-      this.$store.commit("auth/REMOVE_ADMIN");
+      this.$store.commit("auth/REMOVE_JWT");
       this.$router.push("/admin");
     },
   },
