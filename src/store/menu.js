@@ -35,6 +35,17 @@ export default {
         throw new Error(e.message);
       }
     },
+    async updateMenu(item) {
+      try {
+        const { status } = await axios.put("/dashboard/menu/categories", item);
+        if (status === 200) {
+          return true;
+        }
+      } catch (e) {
+        console.error("[Error]: updateMenu");
+        throw new Error(e.message);
+      }
+    },
     async fetchMenu({ commit }) {
       try {
         const { data, status } = await axios.get("/dashboard/menu/categories");
