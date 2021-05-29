@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import auth from "./auth";
 import menu from "./menu";
 import dishes from "./dishes";
+import reviews from "./reviews";
 
 Vue.use(Vuex);
 
@@ -14,5 +15,6 @@ export default new Vuex.Store({
     auth,
     menu,
     dishes,
+    reviews,
   },
 });
