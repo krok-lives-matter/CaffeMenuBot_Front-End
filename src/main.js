@@ -3,12 +3,12 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import axios from "axios";
+import Notifications from "vue-notification";
 import "normalize.css/normalize.css";
 import "./assets/scss/_fonts.scss";
 import "./assets/scss/all.scss";
 
 Vue.config.productionTip = false;
-
 Vue.filter("truncate", function (text, stop, clamp) {
   return text.slice(0, stop) + (stop < text.length ? clamp || "..." : "");
 });
@@ -22,8 +22,8 @@ axios.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response.status === 401) {
-      router.push("/admin");
       store.commit("auth/REMOVE_JWT");
+      router.push("/admin");
       return;
     }
     return Promise.reject(error);
@@ -43,6 +43,8 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
+Vue.use(Notifications);
 
 new Vue({
   router,
