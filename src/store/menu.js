@@ -35,7 +35,7 @@ export default {
         throw new Error(e.message);
       }
     },
-    async updateMenu(item) {
+    async updateMenu(context, item) {
       try {
         const { status } = await axios.put("/dashboard/menu/categories", item);
         if (status === 200) {
