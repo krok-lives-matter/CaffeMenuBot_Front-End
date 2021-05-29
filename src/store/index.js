@@ -4,6 +4,7 @@ import auth from "./auth";
 import menu from "./menu";
 import dishes from "./dishes";
 import reviews from "./reviews";
+import status from "./status";
 
 Vue.use(Vuex);
 
@@ -16,5 +17,6 @@ export default new Vuex.Store({
     menu,
     dishes,
     reviews,
+    status,
   },
 });
