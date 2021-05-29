@@ -1,6 +1,6 @@
 <template>
   <div class="status">
-    <h1>Status</h1>
+    <h1>Server Status</h1>
     <div class="status__chart">
       <LineChart />
     </div>
@@ -8,11 +8,11 @@
       <button
         @click="toggleButton"
         class="btn"
-        :class="!start ? 'btn-danger' : 'btn-success'"
+        :class="$store.state.status.isRunning ? 'btn-danger' : 'btn-success'"
       >
         {{ isStart }} the bot
       </button>
-      <button class="btn btn-warning">Restart the bot</button>
+      <button @click="restart" class="btn btn-warning">Restart the bot</button>
     </div>
   </div>
 </template>
@@ -23,18 +23,47 @@ import LineChart from "./chart/LineChart.js";
 export default {
   name: "Status",
   components: { LineChart },
+  async mounted() {
+    await this.$store.dispatch("status/getStatus");
+  },
   data: () => ({
     start: false,
   }),
 
   computed: {
     isStart() {
-      return this.start ? "Start" : "Stop";
+      console.log(this.$store.state.status.isRunning);
+      return this.$store.state.status.isRunning ? "Stop" : "Start";
     },
   },
   methods: {
     toggleButton() {
-      this.start = !this.start;
+      if (this.$store.state.status.isRunning) {
+        this.$store.dispatch("status/stopTheBot");
+        this.$notify({
+          group: "foo",
+          title: "Bot is stopped",
+          text: "Be careful now bot is down",
+          type: "error",
+        });
+      } else {
+        this.$store.dispatch("status/startTheBot");
+        this.$notify({
+          group: "foo",
+          title: "Bot is running",
+          text: "Be careful now bot is up",
+          type: "success",
+        });
+      }
+    },
+    restart() {
+      this.$store.dispatch("status/restartTheBot");
+      this.$notify({
+        group: "foo",
+        title: "Bot is restarted",
+        text: "Be careful now bot is up",
+        type: "success",
+      });
     },
   },
 };
