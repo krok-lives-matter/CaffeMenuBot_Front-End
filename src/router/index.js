@@ -5,6 +5,14 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    path: "/",
+    name: "User",
+    component: () => import("../views/User.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: "/status",
     name: "Status",
     component: () => import("../views/Home.vue"),
@@ -21,9 +29,17 @@ const routes = [
     },
   },
   {
-    path: "/",
-    name: "User",
-    component: () => import("../views/User.vue"),
+    path: "/menu/dishes/:id",
+    name: "Dishes",
+    component: () => import("../views/Dishes.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/reviews",
+    name: "Reviews",
+    component: () => import("../views/Reviews.vue"),
     meta: {
       requiresAuth: true,
     },
@@ -32,14 +48,6 @@ const routes = [
     path: "/admin",
     name: "AdminAuth",
     component: () => import("../views/AdminAuth.vue"),
-  },
-  {
-    path: "/menu/dishes/:id",
-    name: "Dishes",
-    component: () => import("../views/Dishes.vue"),
-    meta: {
-      requiresAuth: true,
-    },
   },
   {
     path: "*",
