@@ -44,8 +44,8 @@ export default {
       },
       {
         name: "Reviews",
-        link: "/review",
-        img: "fire-apple.png",
+        link: "/reviews",
+        img: "star.png",
       },
     ],
   }),
@@ -55,7 +55,7 @@ export default {
     },
     signOut() {
       this.$store.commit("auth/REMOVE_JWT");
-      this.$router.push("/admin");
+      window.location.href = "/admin";
     },
   },
 };
