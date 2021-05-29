@@ -2,7 +2,7 @@
   <div class="status">
     <h1>Status</h1>
     <div class="status__chart">
-      <LineChart :chart-data="dataCollection" :options="options" />
+      <LineChart />
     </div>
     <div class="status__buttons">
       <button
@@ -25,54 +25,8 @@ export default {
   components: { LineChart },
   data: () => ({
     start: false,
-    dataCollection: {
-      datasets: [
-        {
-          backgroundColor: "#7E93FF",
-          borderColor: "#593C8F",
-          fill: false,
-          data: [
-            {
-              x: 0,
-              y: 92,
-            },
-            {
-              x: 25,
-              y: 22,
-            },
-            {
-              x: 50,
-              y: 37,
-            },
-            {
-              x: 75,
-              y: 90,
-            },
-            {
-              x: 100,
-              y: 0,
-            },
-          ],
-        },
-      ],
-    },
-    options: {
-      height: 477,
-      responsive: true,
-      maintainAspectRatio: false,
-      legend: {
-        display: false,
-      },
-      scales: {
-        xAxes: [
-          {
-            type: "linear",
-            position: "bottom",
-          },
-        ],
-      },
-    },
   }),
+
   computed: {
     isStart() {
       return this.start ? "Start" : "Stop";
@@ -91,6 +45,7 @@ export default {
   width: 100%;
 
   &__chart {
+    height: 400px;
     width: 100%;
     margin-bottom: 30px;
   }
