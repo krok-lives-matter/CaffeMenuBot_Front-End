@@ -23,156 +23,166 @@
         <div class="dishes__back-text">Back</div>
       </RouterLink>
       <h1>Dishes</h1>
-      <div v-if="$store.state.menu.menu" class="dishes__wrap">
-        <div class="dishes__item">
-          <label for="file">
-            <div class="dishes__image">
-              <img
-                v-if="!$store.state.menu.menu.coverPhotoUrl"
-                src="@/assets/images/big-menu-preview.png"
-                alt="pic"
-              />
-              <img
-                v-else
-                :src="$store.state.menu.menu.coverPhotoUrl"
-                alt="pic"
-              />
-            </div>
-          </label>
-          <input
-            type="file"
-            id="file"
-            accept="image/*"
-            @change="fileImage = $event.target.files[0]"
-          />
-          <div class="dishes__title" id="dishes-title">
-            {{ $store.state.menu.menu.categoryName }}
-          </div>
-          <div class="dishes__controls">
-            <div
-              @click="toggleCheck"
-              :class="{
-                'dishes-control-switch--active':
-                  $store.state.menu.menu.isVisible,
-              }"
-              class="dishes-control dishes-control-switch"
-            >
-              <span></span>
-            </div>
-            <div class="dishes-control dishes-control-icon" @click="deleteMenu">
-              <img src="@/assets/images/remove.svg" alt="pic" />
-            </div>
-            <div class="dishes-control dishes-control-icon" @click="openModal">
-              <img src="@/assets/images/edit.svg" alt="pic" />
-            </div>
-          </div>
-        </div>
-        <div class="dishes__item">
-          <div class="dishes__search">
+      <template v-if="!error">
+        <div v-if="$store.state.menu.menu" class="dishes__wrap">
+          <div class="dishes__item">
+            <label for="file">
+              <div class="dishes__image">
+                <img
+                  v-if="!$store.state.menu.menu.coverPhotoUrl"
+                  src="@/assets/images/big-menu-preview.png"
+                  alt="pic"
+                />
+                <img
+                  v-else
+                  :src="$store.state.menu.menu.coverPhotoUrl"
+                  alt="pic"
+                />
+              </div>
+            </label>
             <input
-              v-model="search"
-              :disabled="tabs !== 'table'"
-              class="input"
-              :class="{ 'input-disabled': tabs !== 'table' }"
-              type="text"
-              placeholder="Search..."
+              type="file"
+              id="file"
+              accept="image/*"
+              @change="fileImage = $event.target.files[0]"
             />
-            <button
-              @click="switchTab"
-              class="btn btn-primary dishes__search-btn"
-              type="submit"
-            >
-              {{ tabs === "table" ? "Add mode" : "Search mode" }}
-            </button>
+            <div class="dishes__title" id="dishes-title">
+              {{ $store.state.menu.menu.categoryName }}
+            </div>
+            <div class="dishes__controls">
+              <div
+                @click="toggleCheck"
+                :class="{
+                  'dishes-control-switch--active':
+                    $store.state.menu.menu.isVisible,
+                }"
+                class="dishes-control dishes-control-switch"
+              >
+                <span></span>
+              </div>
+              <div
+                class="dishes-control dishes-control-icon"
+                @click="deleteMenu"
+              >
+                <img src="@/assets/images/remove.svg" alt="pic" />
+              </div>
+              <div
+                class="dishes-control dishes-control-icon"
+                @click="openModal"
+              >
+                <img src="@/assets/images/edit.svg" alt="pic" />
+              </div>
+            </div>
           </div>
-          <div v-if="tabs === 'table'" class="dishes__table">
-            <template v-if="$store.state.dishes.dishes.length">
-              <DishTableItem
-                v-for="dish in searchDish"
-                :key="dish.id"
-                :dish="dish"
-                @deleteDish="deleteDish"
-                @editDish="editDish"
+          <div class="dishes__item">
+            <div class="dishes__search">
+              <input
+                v-model="search"
+                :disabled="tabs !== 'table'"
+                class="input"
+                :class="{ 'input-disabled': tabs !== 'table' }"
+                type="text"
+                placeholder="Search..."
               />
-            </template>
-            <template v-else>
-              <div class="dishes__table-item">
-                <div class="dishes__table-head">
-                  <div class="dishes__table-big-title">
-                    Nothing here, switch to add mode and start adding dishes...
+              <button
+                @click="switchTab"
+                class="btn btn-primary dishes__search-btn"
+                type="submit"
+              >
+                {{ tabs === "table" ? "Add mode" : "Search mode" }}
+              </button>
+            </div>
+            <div v-if="tabs === 'table'" class="dishes__table">
+              <template v-if="$store.state.dishes.dishes.length">
+                <DishTableItem
+                  v-for="dish in searchDish"
+                  :key="dish.id"
+                  :dish="dish"
+                  @deleteDish="deleteDish"
+                  @editDish="editDish"
+                />
+              </template>
+              <template v-else>
+                <div class="dishes__table-item">
+                  <div class="dishes__table-head">
+                    <div class="dishes__table-big-title">
+                      Nothing here, switch to add mode and start adding
+                      dishes...
+                    </div>
                   </div>
                 </div>
-              </div>
-            </template>
+              </template>
+            </div>
+            <form
+              @submit.prevent="addDish"
+              v-if="tabs === 'form'"
+              class="dishes__form"
+            >
+              <input
+                class="input"
+                v-model="dish.dishName"
+                type="text"
+                placeholder="Title..."
+              />
+              <input
+                class="input"
+                v-model="dish.price"
+                type="number"
+                placeholder="Price..."
+              />
+              <input
+                class="input"
+                v-model="dish.serving"
+                type="text"
+                placeholder="Serving..."
+              />
+              <textarea
+                v-model="dish.description"
+                class="textarea"
+                type="text"
+                placeholder="Description..."
+              />
+              <button class="btn btn-success dishes__form-button">
+                add dish
+              </button>
+            </form>
+            <form
+              @submit.prevent="updateDish"
+              v-if="tabs === 'update'"
+              class="dishes__form"
+            >
+              <input
+                v-model="currentDish.dishName"
+                class="input"
+                type="text"
+                placeholder="Name..."
+              />
+              <input
+                v-model="currentDish.price"
+                class="input"
+                type="number"
+                placeholder="Price..."
+              />
+              <input
+                v-model="currentDish.serving"
+                class="input"
+                type="text"
+                placeholder="Weight..."
+              />
+              <textarea
+                v-model="currentDish.description"
+                class="textarea"
+                type="text"
+                placeholder="Description..."
+              />
+              <button class="btn btn-primary dishes__form-button">
+                update dish
+              </button>
+            </form>
           </div>
-          <form
-            @submit.prevent="addDish"
-            v-if="tabs === 'form'"
-            class="dishes__form"
-          >
-            <input
-              class="input"
-              v-model="dish.dishName"
-              type="text"
-              placeholder="Title..."
-            />
-            <input
-              class="input"
-              v-model="dish.price"
-              type="number"
-              placeholder="Price..."
-            />
-            <input
-              class="input"
-              v-model="dish.serving"
-              type="text"
-              placeholder="Serving..."
-            />
-            <textarea
-              v-model="dish.description"
-              class="textarea"
-              type="text"
-              placeholder="Description..."
-            />
-            <button class="btn btn-success dishes__form-button">
-              add dish
-            </button>
-          </form>
-          <form
-            @submit.prevent="updateDish"
-            v-if="tabs === 'update'"
-            class="dishes__form"
-          >
-            <input
-              v-model="currentDish.dishName"
-              class="input"
-              type="text"
-              placeholder="Name..."
-            />
-            <input
-              v-model="currentDish.price"
-              class="input"
-              type="number"
-              placeholder="Price..."
-            />
-            <input
-              v-model="currentDish.serving"
-              class="input"
-              type="text"
-              placeholder="Weight..."
-            />
-            <textarea
-              v-model="currentDish.description"
-              class="textarea"
-              type="text"
-              placeholder="Description..."
-            />
-            <button class="btn btn-primary dishes__form-button">
-              update dish
-            </button>
-          </form>
         </div>
-      </div>
+      </template>
+      <template v-else> Error 404</template>
     </div>
   </MainLayout>
 </template>
@@ -188,14 +198,20 @@ export default {
   components: { Modal, MainLayout, DishTableItem },
   async mounted() {
     document.addEventListener("keydown", this.exitModalByKeyPress);
-    await this.$store.dispatch("menu/fetchOneMenu", this.dish.categoryId);
-    await this.$store.dispatch("dishes/fetchDishes", this.dish.categoryId);
+    try {
+      await this.$store.dispatch("menu/fetchOneMenu", this.dish.categoryId);
+      await this.$store.dispatch("dishes/fetchDishes", this.dish.categoryId);
+      this.error = false;
+    } catch (e) {
+      this.error = true;
+    }
   },
   beforeDestroy() {
     document.removeEventListener("keydown", this.exitModalByKeyPress);
   },
   data() {
     return {
+      error: false,
       title: "",
       modal: false,
       fileImage: null,
@@ -255,6 +271,14 @@ export default {
         console.error("[Error]: toggleCheck");
         throw new Error(e.message);
       }
+      const text = this.$store.state.menu.menu.isVisible
+        ? "Now your menu is visible"
+        : "Now your menu is invisible";
+      this.$notify({
+        group: "foo",
+        title: "Change visibility",
+        text: text,
+      });
     },
     async addDish() {
       await this.$store.dispatch("dishes/addDish", this.dish);
@@ -280,21 +304,23 @@ export default {
       await this.$router.push("/menu");
     },
     async updateTitle() {
+      this.$store.state.menu.menu.categoryName = this.title;
       const item = this.$store.state.menu.menu;
-      item.categoryName = this.title;
-      item.id = String(item.id);
       if (this.title.length) {
         await this.$store.dispatch("menu/updateMenu", item);
         await this.$store.dispatch("menu/fetchOneMenu", this.dish.categoryId);
+        this.title = "";
+        this.modal = false;
       }
     },
   },
   watch: {
-    fileImage() {
+    async fileImage() {
       const formData = new FormData();
       formData.append("file", this.fileImage, this.fileImage.name);
       formData.append("categoryId", this.dish.categoryId);
-      this.$store.dispatch("menu/setCoverPhoto", formData);
+      await this.$store.dispatch("menu/setCoverPhoto", formData);
+      await this.$store.dispatch("menu/fetchOneMenu", this.dish.categoryId);
     },
   },
 };
