@@ -28,14 +28,12 @@ export default {
   actions: {
     async authAdmin({ commit }, admin) {
       try {
-        const { data, status } = await axios.post("/auth/login", admin);
-        if (status === 200) {
-          commit("SET_JWT", data);
-          return true;
-        }
+        const { data } = await axios.post("/auth/login", admin);
+        commit("SET_JWT", data);
+        return true;
       } catch (e) {
         console.error("[Error]: Auth admin");
-        throw new Error(e.message);
+        return false;
       }
     },
     async getMe({ commit }) {
