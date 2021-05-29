@@ -32,7 +32,6 @@ export default {
 
   computed: {
     isStart() {
-      console.log(this.$store.state.status.isRunning);
       return this.$store.state.status.isRunning ? "Stop" : "Start";
     },
   },
