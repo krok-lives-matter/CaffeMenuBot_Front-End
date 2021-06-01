@@ -274,10 +274,12 @@ export default {
       const text = this.$store.state.menu.menu.isVisible
         ? "Now your menu is visible"
         : "Now your menu is invisible";
+      const type = this.$store.state.menu.menu.isVisible ? "success" : "error";
       this.$notify({
         group: "foo",
         title: "Change visibility",
         text: text,
+        type: type,
       });
     },
     async addDish() {
