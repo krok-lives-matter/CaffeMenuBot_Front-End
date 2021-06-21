@@ -6,6 +6,7 @@ import dishes from "./dishes";
 import reviews from "./reviews";
 import status from "./status";
 import user from "./user";
+import schedule from "./schedule";
 
 Vue.use(Vuex);
 
@@ -20,5 +21,6 @@ export default new Vuex.Store({
     reviews,
     status,
     user,
+    schedule,
   },
 });

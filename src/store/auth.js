@@ -4,7 +4,7 @@ export default {
   namespaced: true,
   state: {
     jwt: localStorage.getItem("jwt"),
-    admin: null,
+    admin: {},
   },
   getters: {
     getAdmin(state) {

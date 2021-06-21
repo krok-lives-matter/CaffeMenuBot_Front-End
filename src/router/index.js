@@ -45,6 +45,14 @@ const routes = [
     },
   },
   {
+    path: "/schedule",
+    name: "Schedule",
+    component: () => import("../views/Schedule.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: "/admin",
     name: "AdminAuth",
     component: () => import("../views/AdminAuth.vue"),

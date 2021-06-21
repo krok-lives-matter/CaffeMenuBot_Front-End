@@ -43,6 +43,11 @@ export default {
         img: "fire-apple.png",
       },
       {
+        name: "Schedule",
+        link: "/schedule",
+        img: "apple-watch.png",
+      },
+      {
         name: "Reviews",
         link: "/reviews",
         img: "star.png",
