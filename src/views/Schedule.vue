@@ -129,6 +129,7 @@ export default {
     editItem(schedule) {
       this.mode = "edit_mode";
       this.schedule = {
+        id: schedule.id,
         weekdayName: schedule.weekdayName,
         openTime: schedule.openTime,
         closeTime: schedule.closeTime,
