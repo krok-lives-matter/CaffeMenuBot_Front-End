@@ -1,6 +1,7 @@
 <template>
   <MainLayout>
     <div class="admin">
+      <img src="https://cmb-api.vova-lantsov.dev/images/qr.png" alt="qr-code" />
       <h1>Hello, {{ admin.userName }}</h1>
       <p>Your email: {{ admin.email }}</p>
       <p>Your id: {{ admin.id }}</p>
@@ -150,5 +151,9 @@ export default {
 <style scoped>
 .admin {
   width: 100%;
+}
+img {
+  width: 350px;
+  height: 350px;
 }
 </style>
